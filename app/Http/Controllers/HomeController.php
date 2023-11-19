@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\ExportExcel;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 use Spatie\PdfToImage\Pdf;
@@ -24,7 +25,14 @@ class HomeController extends Controller
             // return $path;
             // $fullPath = config('app.url'). Storage::url($path);
             // return config('app.url') . $fullPath;
-            $pageCount = $this->pdfToImages(storage_path('app/' . $path));
+            try {
+                $pageCount = $this->pdfToImages(storage_path('app/' . $path));
+                Storage::delete($path);
+            } catch (\Throwable $th) {
+                Storage::delete($path);
+                return response()->json([], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
             return [
                 'image_path' => config('app.url') . Storage::url('public/pages/page_0.jpg'),
                 'page_number' => $pageCount
