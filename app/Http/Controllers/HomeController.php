@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\HandlePercentPdfToPusher;
 use App\Http\Services\ExportExcel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,9 +28,9 @@ class HomeController extends Controller
             // return config('app.url') . $fullPath;
             try {
                 $pageCount = $this->pdfToImages(storage_path('app/' . $path));
-                Storage::delete($path);
+                // Storage::delete($path);
             } catch (\Throwable $th) {
-                Storage::delete($path);
+                // Storage::delete($path);
                 return response()->json([], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
@@ -57,6 +58,8 @@ class HomeController extends Controller
                 ->saveImage($imagePath);
 
             $imagePaths[] = $imagePath;
+
+            HandlePercentPdfToPusher::dispatch(round($pageNumber * 100 / $pageCount));
         }
 
         return $pageCount;
