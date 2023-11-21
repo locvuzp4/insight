@@ -14,11 +14,11 @@ class HandlePercentPdfToPusher implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $percent;
+    public $data;
 
-    public function __construct($percent)
+    public function __construct($data)
     {
-        $this->percent = $percent;
+        $this->data = $data;
     }
   
     public function broadcastOn()

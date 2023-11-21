@@ -19,6 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('caculate-point', [HomeController::class, 'caculatePoint']);
+Route::post('caculate-point', [HomeController::class, 'caculatePoint']);
 
 Route::post('upload-file', [HomeController::class, 'uploadFile']);

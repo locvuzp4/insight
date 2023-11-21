@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Events\HandlePercentPdfToPusher;
 use App\Http\Services\ExportExcel;
+use App\Jobs\PdfToImages;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
-use Spatie\PdfToImage\Pdf;
 
 class HomeController extends Controller
 {
@@ -26,43 +26,9 @@ class HomeController extends Controller
             // return $path;
             // $fullPath = config('app.url'). Storage::url($path);
             // return config('app.url') . $fullPath;
-            try {
-                $pageCount = $this->pdfToImages(storage_path('app/' . $path));
-                // Storage::delete($path);
-            } catch (\Throwable $th) {
-                // Storage::delete($path);
-                return response()->json([], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-
-            return [
-                'image_path' => config('app.url') . Storage::url('public/pages/page_0.jpg'),
-                'page_number' => $pageCount
-            ];
+            PdfToImages::dispatch(storage_path('app/' . $path));
         }
-    }
-
-    public function pdfToImages($pdfPath)
-    {
-        $pdf = new Pdf($pdfPath);
-        $pageCount = $pdf->getNumberOfPages();
-
-        $imagePaths = [];
-
-        if (!Storage::exists('public/pages')) {
-            Storage::makeDirectory('public/pages');
-        }
-
-        for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
-            $imagePath = storage_path('app/public/pages/page_' . $pageNumber - 1 . '.jpg');
-            $pdf->setPage($pageNumber)
-                ->saveImage($imagePath);
-
-            $imagePaths[] = $imagePath;
-
-            HandlePercentPdfToPusher::dispatch(round($pageNumber * 100 / $pageCount));
-        }
-
-        return $pageCount;
+        return true;
     }
 
     public function caculatePoint(Request $request)
