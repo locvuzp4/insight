@@ -31,6 +31,12 @@ class PdfToImages implements ShouldQueue
      */
     public function handle(): void
     {
+        // HandlePercentPdfToPusher::dispatch([
+        //     'type' => 2,
+        //     'image_path' => config('app.url') . Storage::url('public/pages/page_0.jpg'),
+        //     'page_number' => 600
+        // ]);
+        // return;
         try {
             $pdf = new Pdf($this->pdfPath);
             $pageCount = $pdf->getNumberOfPages();

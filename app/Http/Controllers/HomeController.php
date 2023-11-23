@@ -18,14 +18,11 @@ class HomeController extends Controller
         //     'image_path' => config('app.url') . Storage::url('public/pages/page_0.jpg'),
         //     'page_number' => 5
         // ];
-        // return config('app.url') . Storage::url('public/pages/page_0.jpg');
-        // return storage_path('app/public/whpU1t0LSc3M3dqXgpnZ1980qHU8HJ850jtUSHSp.pdf');
+
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $path = $file->store('public');
-            // return $path;
             // $fullPath = config('app.url'). Storage::url($path);
-            // return config('app.url') . $fullPath;
             PdfToImages::dispatch(storage_path('app/' . $path));
         }
         return true;
