@@ -90,14 +90,6 @@ class GoogleSheetApiCommand extends Command
 		$service = new Google_Service_Sheets($client);
 		$spreadsheetId = '13PVDQEY1jIAQQuzxzx1VsYH4IpV_xeo7s0C-8YOAWC4';
 		$range = 'gg!A2:D';
-
-		// get values
-		// $response = $service->spreadsheets_values->get($spreadsheetId, $range);
-		// $values = $response->getValues();
-
-		// print_r($values);
-
-		// add/edit values
 		$data = [
 			[
 				'column A2',
