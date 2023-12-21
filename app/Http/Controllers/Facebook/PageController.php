@@ -9,6 +9,7 @@ use App\Helpers\GoogleSheet;
 use Google_Client;
 use Google_Service_Sheets;
 use Google_Service_Sheets_ValueRange;
+use Airtable;
 
 class PageController extends Controller
 {
@@ -17,9 +18,7 @@ class PageController extends Controller
         $response = $this->get('me', [
             'fields' => 'id,name'
         ]);
-        // dd($response->id);
         $response = $this->get($pageId . '/feed');
-        return $response;
 
         // $countPost = count($response->data);
         // while (isset($response->paging['next'])) {
@@ -32,7 +31,8 @@ class PageController extends Controller
 
         $posts = $response->data;
         $metaData = [];
-        for ($i = 0; $i < count($posts); $i++) {
+        // for ($i = 0; $i < count($posts); $i++) {
+        for ($i = 0; $i < 1; $i++) {
             $post = $posts[$i];
             // return $post;
 
@@ -63,9 +63,31 @@ class PageController extends Controller
             $postDetail['created_time'] = Carbon::parse($post['created_time'])->timezone('Asia/Ho_Chi_Minh')->format('H:i d/m/Y');
 
             $metaData[$post['id']] = $postDetail;
-            return $postDetail;
+            // return $postDetail;
         }
-        return $metaData;
+        $airTableData = [];
+        $stt = 1;
+        foreach ($metaData as $postId => $postDetail) {
+            $airTableData[] = [
+                'STT' => $stt,
+                'Post ID' => $postId,
+                'Post' => $postDetail['content'],
+                'Reach' => $postDetail['reach'],
+                'Engagements' => $postDetail['engagement'],
+                'React' => $postDetail['reactions'],
+                'Comment' => $postDetail['comments'],
+                'Share' => $postDetail['shares'],
+                'Ngày đăng bài' => $postDetail['created_time'],
+            ];
+            $stt++;
+        }
+        // dd($airTableData);
+        // return $metaData;
+        return Airtable::table('ba_con_soi')->patch([
+            [
+                'fields' => ['Post' => 'US2']
+            ]
+        ]);
     }
 
     private function get($path, $params = [])
@@ -73,5 +95,25 @@ class PageController extends Controller
         $params['access_token'] = 'EAAFfK6VooAcBOZBcblNfR98TSzEcPrGKvFsyrVwE5SwLLi6H6Qhy4tT1dblGLPQadaNQOrAafSg0r5Eo4SGTomHF663F3uQGZBhUkSZBZAZCnpanlx1KXf7xQHm4zhEwWZCO6kY815K1aSZC8bOktSwfZBbKtB4RSsF10ZCWtWXD44M6rX7idAS2ZAcMHHxV0vDccZD';
         $response = Http::get('https://graph.facebook.com/v18.0/' . $path, $params);
         return (object) $response->json();
+    }
+
+    public function handleAirTable()
+    {
+        $airTable = Airtable::table('ba_con_soi')->orderBy('STT')->get()->toArray();
+        return $airTable;
+        // $airTableFirst = $airTable[0];
+        // return $airTableFirst;
+        // return Airtable::table('default')->patch(
+        //     $airTableFirst['id'],
+        //     [
+        //         'Notes' => 'US'
+        //     ]
+        // );
+        return Airtable::table('default')->patch([
+            [
+                'id' => $airTableFirst['id'],
+                'fields' => ['Notes' => 'US2']
+            ]
+        ]);
     }
 }

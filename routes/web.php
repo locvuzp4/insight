@@ -19,6 +19,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('test', [TestController::class, 'test']);
-
 Route::get('page/{pageId}/posts-detail', [PageController::class, 'postsDetail']);
+
+Route::get('page/handle-air-table', [PageController::class, 'handleAirTable']);

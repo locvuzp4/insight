@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Events\HandlePercentPdfToPusher;
 use Illuminate\Console\Command;
+use Airtable;
 
 class TestCommand extends Command
 {
@@ -26,6 +27,11 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        HandlePercentPdfToPusher::dispatch(10);
+        for ($i=0; $i < 10; $i++) { 
+            Airtable::table('ba_con_soi')->create([
+                'Post ID' => strval($i)
+            ]);
+            dump($i);
+        }
     }
 }
