@@ -22,3 +22,4 @@ Route::get('/', function () {
 Route::get('page/{pageId}/posts-detail', [PageController::class, 'postsDetail']);
 
 Route::get('page/handle-air-table', [PageController::class, 'handleAirTable']);
+Route::get('page/get-leads', [PageController::class, 'getLeads']);

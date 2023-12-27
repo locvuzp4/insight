@@ -41,12 +41,8 @@ return [
 
     'tables' => [
         'default' => [
-            'name' => 'hello'
-        ],
-
-        'ba_con_soi' => [
             'name' => 'tblbauUpl3XzAKeFb'
-        ],
+        ]
     ],
 
     /*
