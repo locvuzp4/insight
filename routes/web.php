@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Facebook\PageController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\WebhooksController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,3 +24,8 @@ Route::get('page/{pageId}/posts-detail', [PageController::class, 'postsDetail'])
 
 Route::get('page/handle-air-table', [PageController::class, 'handleAirTable']);
 Route::get('page/get-leads', [PageController::class, 'getLeads']);
+
+Route::group(['prefix' => 'webhooks'], function () {
+    Route::get('page', [WebhooksController::class, 'pageCallBack']);
+    Route::post('page', [WebhooksController::class, 'page'])->name('pageWebhooks');
+});
