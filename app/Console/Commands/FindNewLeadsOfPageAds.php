@@ -38,7 +38,7 @@ class FindNewLeadsOfPageAds extends Command
      */
     public function handle()
     {
-        $lastTime = Carbon::now('UTC')->subMinutes(60)->toIso8601String();
+        $lastTime = Carbon::now('UTC')->subMinutes(120)->toIso8601String();
 
         $countPage = 0;
         $totalLeads = 0;
@@ -64,8 +64,14 @@ class FindNewLeadsOfPageAds extends Command
                 $countForm = 0;
                 while ($linkFormNext) {
                     $formResponse = $this->get($linkFormNext, $paramsForm);
-                    $formData = isset($formResponse['leadgen_forms']) ? $formResponse['leadgen_forms']['data'] : $formResponse['data'];
-                    $formPaging = isset($formResponse['leadgen_forms']) ? $formResponse['leadgen_forms']['paging'] : $formResponse['paging'];
+                    $formData = [];
+                    if (isset($formResponse['leadgen_forms'])) {
+                        $formData = $formResponse['leadgen_forms']['data'];
+                        $formPaging = $formResponse['leadgen_forms']['paging'];
+                    } elseif (isset($formResponse['data'])) {
+                        $formData = $formResponse['data'];
+                        $formPaging = $formResponse['paging'];
+                    }
 
                     foreach ($formData as $form) {
                         $countForm++;
@@ -88,8 +94,8 @@ class FindNewLeadsOfPageAds extends Command
                                     $baseData = [
                                         'page_id' => $page['id'],
                                         'page_name' => $page['name'],
-                                        'camp_id' => $form['id'],
-                                        'camp_name' => $form['name'],
+                                        'form_id' => $form['id'],
+                                        'form_name' => $form['name'],
                                         'id' => $lead['id'],
                                         'created_time' => $lead['created_time']
                                     ];

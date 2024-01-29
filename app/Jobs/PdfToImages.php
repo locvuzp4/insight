@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Spatie\PdfToImage\Pdf;
 
@@ -58,6 +59,7 @@ class PdfToImages implements ShouldQueue
                     'type' => 1,
                     'percent' => round($pageNumber * 100 / $pageCount)
                 ]);
+                Log::info(round($pageNumber * 100 / $pageCount));
             }
 
             // Storage::delete($path);
@@ -73,5 +75,6 @@ class PdfToImages implements ShouldQueue
             'image_path' => config('app.url') . Storage::url('public/pages/page_0.jpg'),
             'page_number' => $pageCount
         ]);
+        Log::info('count: '.$pageCount);
     }
 }

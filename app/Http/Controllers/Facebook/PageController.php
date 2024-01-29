@@ -155,18 +155,19 @@ class PageController extends Controller
         $lastTime = Carbon::now('UTC')->subMinutes(60)->toIso8601String();
         $countPage = 0;
         $leadsData = [];
-        $linkNext = 'me/accounts';
+        $linkNext = 'me?fields=id,name,adaccounts';
         while ($linkNext) {
             $pageResponse = $this->get($linkNext);
-            return $pageResponse;
-            // dd($pageResponse);
+            dd($pageResponse);
             // $linkNext = null;
             $linkNext = isset($pageResponse['paging']['next']) ? $pageResponse['paging']['next'] : false;
             $pages = $pageResponse['data'];
+            // dd($pages);
             $countPage += count($pages);
             for ($i = 2; $i < count($pages); $i++) {
                 $page = $pages[$i];
-                if ($page['id'] == '150067171518245') {
+                if ($page['name'] == 'Tiến Đến Tự Do Tài Chính') {
+                    // dd($page);
                     $count = 0;
                     $linkFormNext = 'me';
                     $paramsForm = [
@@ -186,24 +187,24 @@ class PageController extends Controller
                                 $countLead = 0;
                                 while (count($leads)) {
                                     for ($j = 0; $j < count($leads); $j++) {
-                                        // $lead = $leads[$j];
-                                        // if ($lastTime > $lead['created_time']) {
-                                        //     break;
-                                        // }
-                                        // $info = [];
-                                        // foreach ($lead['field_data'] as $data) {
-                                        //     $info[$data['name']] = $data['values'][0];
-                                        // }
-                                        // $baseData = [
-                                        //     'page_id' => $page['id'],
-                                        //     'page_name' => $page['name'],
-                                        //     'camp_id' => $form['id'],
-                                        //     'camp_name' => $form['name'],
-                                        //     'id' => $lead['id'],
-                                        //     'created_time' => $lead['created_time']
-                                        // ];
-                                        // $leadsData[] = array_merge($baseData, $info);
-                                        // dd($leadsData);
+                                        $lead = $leads[$j];
+                                        if ($lastTime > $lead['created_time']) {
+                                            break;
+                                        }
+                                        $info = [];
+                                        foreach ($lead['field_data'] as $data) {
+                                            $info[$data['name']] = $data['values'][0];
+                                        }
+                                        $baseData = [
+                                            'page_id' => $page['id'],
+                                            'page_name' => $page['name'],
+                                            'camp_id' => $form['id'],
+                                            'camp_name' => $form['name'],
+                                            'id' => $lead['id'],
+                                            'created_time' => $lead['created_time']
+                                        ];
+                                        $leadsData[] = array_merge($baseData, $info);
+                                        dd($leadsData);
 
                                         $countLead++;
                                         Log::info($countLead);
@@ -225,7 +226,6 @@ class PageController extends Controller
                     }
                     dd($count);
                 }
-                dd('done');
             }
         }
         // $countPage++;

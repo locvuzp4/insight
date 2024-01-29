@@ -26,6 +26,13 @@ Route::get('page/handle-air-table', [PageController::class, 'handleAirTable']);
 Route::get('page/get-leads', [PageController::class, 'getLeads']);
 
 Route::group(['prefix' => 'webhooks'], function () {
-    Route::get('page', [WebhooksController::class, 'pageCallBack']);
-    Route::post('page', [WebhooksController::class, 'page'])->name('pageWebhooks');
+    Route::post('change-table', [WebhooksController::class, 'changeTable']);
+
+    Route::group(['prefix' => 'facebook'], function () {
+        Route::get('leads', [WebhooksController::class, 'leadsCallBack']);
+        Route::post('leads', [WebhooksController::class, 'handleLeads']);
+
+        Route::get('page', [WebhooksController::class, 'pageCallBack']);
+        Route::post('page', [WebhooksController::class, 'handlePage']);
+    });
 });

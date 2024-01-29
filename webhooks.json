@@ -1,0 +1,32 @@
+curl -i -X POST "https://graph.facebook.com/110201454817268/subscribed_apps?subscribed_fields=leadgen&access_token=EAAFfK6VooAcBOyOZAvZBB8KjYAnZApAjZCe6hV315ZCyzxRL5lJbkhHYjcZC7mZCOTDGsaTlL3U49xIOPhwEoR4QPeFdkMkG9p9Op7149FcZBCLfcggN3qJTecZAWr2gZAkSrugNuM1Kg0ZCZBZCHZCZAuySHgHgO07gBgwQCAnq6rnEmnWFpotqJEi2sPJr0JGRGtGdQ0ZD"
+curl -i -X GET "https://graph.facebook.com/110201454817268/subscribed_apps?access_token=EAAFfK6VooAcBO13OrhaVQVazPVFf3hBZCTb2P0s67CFSRjeyLGD6TZCUL4N74kVlQRsfkpeJKxMjAgt1B2fRqjqdD9CS8smRThxutZBmvTALaJUYRjxI8aGfKaqle9DYLZBQskjTtZB65SZCBzerBUEmrExUuRx6ytC6PrrZABD6ZBhb1NXAPDd8MZBqVBgIB6YOZAjLgZD"
+
+token:patmDcPF72RmtXkJw.be40fbcf1668340b30406d5e3ae44f42a3761af4cd6f93e72c59faad5484ab80
+
+{
+    "id": "achJXZKaza0C2A215",
+    "macSecretBase64": "VAqXMsKZ7+YqhMLUI3sJOlfd15Z9WXU2bECAVskMXbTYQH2e98oRjYVo5EUJy9ek8wJhYqkXe2B7iIaUtMZPJkUh1qeqZt83LvBeueSkX4BmvbZda9TOl2GQ0rp5bOgwXEy5Va2lArHj0R3pNpCxzxKmpN8EKqb8jtn0bmVxh/8=",
+    "expirationTime": "2024-01-03T10:38:54.396Z"
+}
+
+
+curl -X POST "https://api.airtable.com/v0/bases/app2DtrdCueQjHt12/webhooks" \
+-H "Authorization: Bearer patmDcPF72RmtXkJw.be40fbcf1668340b30406d5e3ae44f42a3761af4cd6f93e72c59faad5484ab80" \
+-H "Content-Type: application/json" \
+--data '{
+    "notificationUrl": "https://adsconnect.co/insight.intercall.vn/webhooks/change-table",
+    "specification": {
+      "options": {
+        "filters": {
+          "dataTypes": [
+            "tableData"
+          ],
+          "changeTypes": ["add"],
+          "recordChangeScope": "tblb4VFyzu2NSiib7"
+        },
+        "includes": {
+          "includeCellValuesInFieldIds": "all"
+        }
+      }
+    }
+  }'
